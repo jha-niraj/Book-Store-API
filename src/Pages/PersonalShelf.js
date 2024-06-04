@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Toaster, toast } from "react-hot-toast";
 
 import Button from "../components/Button";
 import { useEffect } from "react";
@@ -21,16 +22,17 @@ const PersonalShelf = () => {
 
 
     const handleRemovalFromBookShelf = (title) => {
-        console.log(title);
         const updatedBooksList = personalBooks.filter((book) => book.title !== title);
         setPersonalBooks(updatedBooksList);
         localStorage.setItem("personalBookShelf", JSON.stringify(updatedBooksList));
+        toast.success("Book Removed");
     }
 
     return (
         <div className="flex flex-col gap-5 items-center">
+            <Toaster />
             <div className="flex mt-2 items-center justify-between w-[95%]">
-                <h1 className="text-3xl font-bold">Personal Bookshelf</h1>
+                <h1 className="text-3xl font-bold">My Bookshelf</h1>
                 <div className="">
                     <Button onClick={() => navigate("/")} title="Main page" />
                 </div>

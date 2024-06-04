@@ -1,12 +1,12 @@
 import { useEffect, useState, CSSProperties } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; 
 import axios from "axios";
+import { Toaster, toast } from "react-hot-toast"
 import ScaleLoader from "react-spinners/ScaleLoader";
 
 import InputBox from "../components/InputBox";
 import Card from "../components/Card";
 import Navbar from "../components/Navbar";
-import useBookAPI from "../API/BookApi";
 
 import "../index.css";
 const override = {
@@ -15,20 +15,20 @@ const override = {
     borderColor: "red",
 };
 
-const Homepage = () => {
+const Homepage = ({ fetchedData, updateSearchResults }) => {
     const navigate = useNavigate();
     const [ searchQuery, setSearchQuery] = useState("");
     const [ debouncedQuery, setDebouncedQuery ] = useState("");
     const [ isLoading, setIsLoading ] = useState(false);
 
-    const [ searchResults, setSearchResults ] = useState([]);
-    const [ bookShelf, setBookShelf ] = useState([]);
     const [ personalBookShelf, setPersonalBookShelf ] = useState([]);
 
+    // To get the current route to assign it to Button Component:
     const location = useLocation();
     const { pathname, search } = location;
     const currentRoute = (pathname + search).split("/")[1];
 
+    // Debouncing the value from the Search Query:
     useEffect(() => {
         const timerId = setTimeout(() => {
             setDebouncedQuery(searchQuery);
@@ -36,13 +36,14 @@ const Homepage = () => {
         return () => clearTimeout(timerId);
     }, [searchQuery])
 
+    // Fetching the data from the API:
     useEffect(() => {
         const fetchBooks = async () => {
             try {
                 setIsLoading(true);
                 if(debouncedQuery) {
                     const results = await axios.get(`https://openlibrary.org/search.json?q=${debouncedQuery}&limit=10&page=1`);
-                    setBookShelf(results.data.docs);
+                    updateSearchResults(results.data.docs);
                 }
             } catch(err) {
                 console.log(err);
@@ -69,23 +70,27 @@ const Homepage = () => {
         if(storedPersonalBooks) {
             bookExists = storedPersonalBooks.find((book) => book.title === title);
         }
-        
+
         if(!bookExists) {
             const newBooks = [ ...personalBookShelf, { index, title, edition }];
             localStorage.setItem("personalBookShelf", JSON.stringify(newBooks));
             setPersonalBookShelf(newBooks);
+            toast.success("Book Added");
         } else {
-            alert("Book with this credential is already added!!!");
+            toast.error("Book with this credential is already added!!!");
         }
     }
 
     return (
-        <section className="flex flex-col items-center justify-center w-full p-1 mt-3">
+        <section className="flex flex-col items-center justify-center gap-5 w-full p-1 mt-3">
+            <Toaster />
             <Navbar onClick={navigateToBookshelf} currentRoute={currentRoute} />
-            <div className="w-[90%] flex">
+            <div className="w-[90%] sm:w-[80%] lg:w-[70%] flex">
                 <InputBox label="Search by Book Name" type="text" id="searchBook" placeholder="Type your favourite book name" onChange={(e) => setSearchQuery(e.target.value)}  />
             </div>
-            {   isLoading ? 
+            <div className="w-full flex items-center justify-center">
+            {   
+                isLoading ? 
                 <div className="h-96 flex items-center justify-center">
                     <ScaleLoader
                         color="#0d1413"
@@ -98,20 +103,22 @@ const Homepage = () => {
                         data-testid="loader"
                     />
                 </div> :
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 w-[90%]">
+                <div className="flex flex-col w-[90%] sm:w-[80%] lg:w-[70%] mb-10">
+                    <h1 className="text-2xl font-bold">Searched Results</h1>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
                     {
-                        bookShelf.map((book, index) => {
+                        fetchedData.map((book, index) => {
                             return (
                                 <Card key={index} title={book.title} edition={book.edition_count} onClick={()=> handleAdditionToPersonalShelf(index, book.title, book.edition_count)} route={currentRoute} personalBookShelf={personalBookShelf} />
                             )
                         })
                     }
+                    </div>
                 </div>
             }
+            </div>
         </section>
     )
 }
-
-
 
 export default Homepage;

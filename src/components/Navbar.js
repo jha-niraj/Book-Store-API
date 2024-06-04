@@ -7,7 +7,7 @@ const Navbar = ({ onClick }) => {
                 <h1 className="text-3xl font-bold">Book Search</h1>
             </div>
             <div className="flex items-center justify-center bg-gray-300 hover:bg-black hover:text-white rounded-lg">
-                <Button onClick={onClick} title="Personal Bookshelf" />
+                <Button onClick={onClick} title="My Bookshelf" />
             </div>
         </section>
     )
