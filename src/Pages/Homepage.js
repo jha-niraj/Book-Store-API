@@ -65,8 +65,11 @@ const Homepage = () => {
     }
     const handleAdditionToPersonalShelf = (index, title, edition) => {
         const storedPersonalBooks = JSON.parse(localStorage.getItem("personalBookShelf"));
-        const bookExists = storedPersonalBooks.find((book) => book.title === title);
-
+        let bookExists = false;
+        if(storedPersonalBooks) {
+            bookExists = storedPersonalBooks.find((book) => book.title === title);
+        }
+        
         if(!bookExists) {
             const newBooks = [ ...personalBookShelf, { index, title, edition }];
             localStorage.setItem("personalBookShelf", JSON.stringify(newBooks));
