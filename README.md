@@ -13,11 +13,20 @@ The Book Store API is a RESTful API that allows users to search for books, add b
 - Frontend: React.js with JavaScript, Tailwind.css for styling
 
 ## Getting Started
-1. Clone the repository: `git clone https://github.com/jha-niraj/Book-Store-API.git`
-2. Move to the `Book-Store-API folder` by running: `cd Book-Store-API`
-3. Install dependencies: `npm install`
-4. Start the development server: `npm start`
-5. Open the website in your browser: `http://localhost:3000`
+1. Clone the repository:
+   `git clone https://github.com/jha-niraj/Book-Store-API.git`
+   
+2. Move to the `Book-Store-API folder` by running:
+   `cd Book-Store-API`
+   
+3. Install dependencies:
+   `npm install`
+   
+4. Start the development server:
+   `npm start`
+   
+5. Open the website in your browser:
+   `http://localhost:3000`
 
 ## Contact
 - Email: jhaniraj45@gmail.com
