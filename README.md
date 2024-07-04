@@ -8,6 +8,7 @@ The Book Store API is a RESTful API that allows users to search for books, add b
 - **Responsive Design**: The website is optimized for various devices and screen sizes.
 - **Extensive Search**: The Website is equipped with the extensive search mechanism which returns the variety of book lists.
 - **Personal Bookshelf**: Here you can add the book that you like to your personal bookshlef and review it later and also delete the book from your section.
+- **Authentication**: The website is fully authenticated, so that you data will be safe with us and no one other than you can access youe account.
 
 ## Technologies Used
 - Frontend: React.js with JavaScript, Tailwind.css for styling
